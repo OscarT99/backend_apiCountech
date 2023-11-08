@@ -33,14 +33,14 @@ const PedidoModel = sequelize.define('Pedido', {
     },
   },
   fechaRegistro: {
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     defaultValue: DataTypes.NOW,
     validate: {
       isDate: true,
     },
   },
   fechaEntregaOrden: {
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: false,
     validate: {
       notNull: true,
