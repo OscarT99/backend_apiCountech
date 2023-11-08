@@ -74,7 +74,28 @@ const PedidoModel = sequelize.define('Pedido', {
       isIn: [['Registrado', 'En proceso', 'Terminado']],
     },
   },
+  estadoPago: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'Pendiente',
+    validate: {
+      isIn: [['Pago', 'Pendiente']],
+    },
+  },
+  fechaVenta: {
+    type: DataTypes.DATE,
+  allowNull: true,
+  },
 });
+
+
+PedidoModel.addHook('beforeUpdate', 'updateFechaVenta', (pedidoModel, options) => {
+  if (pedidoModel.changed('estado') && pedidoModel.getDataValue('estado') === 'Terminado') {
+    pedidoModel.setDataValue('fechaVenta', new Date());
+  }
+});
+
+
 
 PedidoModel.belongsTo(Cliente, { foreignKey: 'cliente' });
 
