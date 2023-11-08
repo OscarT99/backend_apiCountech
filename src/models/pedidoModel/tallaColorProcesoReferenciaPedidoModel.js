@@ -21,6 +21,20 @@ const TallaColorProcesoReferenciaPedidoModel = sequelize.define('TallaEnColorEnP
       min: 1,
     },
   },
+
+  cantAsignada: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: 0,
+  },
+
+  cantHecha: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: 0,
+  },
+
+  
 });
 
 TallaColorProcesoReferenciaPedidoModel.belongsTo(ColorEnProcesoEnReferenciaEnPedido, { foreignKey: 'color' });

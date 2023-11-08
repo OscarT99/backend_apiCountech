@@ -206,6 +206,17 @@ const putPedido = async (req, res = response) => {
               }
               
 
+       
+            if (body.estadoPago === null) {
+                return res.status(400).json({ error: 'El campo estado de pago no puede ser nulo. Debe ser uno de los siguientes valores: "Pago" o "Pendiente".' });
+            }
+              
+              if (!['Pago', 'Pendiente'].includes(body.estadoPago)) {
+                return res.status(400).json({ error: 'Valor no válido para el campo estado. Debe ser "Pago" o "Pendiente".' });
+              }
+                            
+
+
             await pedido.update(body);
             res.json({
                 success: true,
