@@ -7,6 +7,8 @@ const colorProcesoReferenciaPedidoRoutes = require('./pedidoRoutes/colorProcesoR
 const tallaColorProcesoReferenciaPedidoRoutes = require('./pedidoRoutes/tallaColorProcesoReferenciaPedidoController')
 const categoriaInsumoRoute = require('../routes/insumoRoute/insumoCategoriaRoute') 
 const insumoRoute = require('./insumoRoute/insumoRoute')
+const compraRoute = require('./compraRoute/compraRoute')
+const detalleCompraRoute = require('./compraRoute/detalleCompraRoute')
 
 function configureRoutes(app, path) {
     app.use(path, clienteRoutes);
@@ -17,7 +19,9 @@ function configureRoutes(app, path) {
     app.use(path, colorProcesoReferenciaPedidoRoutes);
     app.use(path, tallaColorProcesoReferenciaPedidoRoutes);
     app.use(path,categoriaInsumoRoute),
-    app.use(path,insumoRoute)    
+    app.use(path,insumoRoute),
+    app.use(path,compraRoute),
+    app.use(path,detalleCompraRoute)    
     }
 
 module.exports = configureRoutes;
