@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../../database/config');
 const Cliente = require('../clienteModel/clienteModel');
+const ReferenciaPedido = require('./referenciaPedidoModel')
 
 const PedidoModel = sequelize.define('Pedido', {
   cliente: {
@@ -9,23 +10,16 @@ const PedidoModel = sequelize.define('Pedido', {
     validate: {
       notNull: true,
     },
-  },
-  contacto: {
-    type: DataTypes.STRING,
-    validate: {
-      is: /^[A-Za-záéíóúüÜÁÉÍÓÑñ. ]+$/,
-    },
-  },
+  },  
   ordenTrabajo: {
     type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
+    allowNull: false,    
     validate: {
       is: /^\d{1,10}$/,
     },
   },
   fechaOrdenTrabajo: {
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: false,
     validate: {
       notNull: true,
@@ -95,8 +89,7 @@ PedidoModel.addHook('beforeUpdate', 'updateFechaVenta', (pedidoModel, options) =
   }
 });
 
-
-
 PedidoModel.belongsTo(Cliente, { foreignKey: 'cliente' });
+PedidoModel.hasMany(ReferenciaPedido, { foreignKey: 'pedido' });
 
 module.exports = PedidoModel;

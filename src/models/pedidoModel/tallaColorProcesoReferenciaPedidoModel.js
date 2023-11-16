@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../../database/config');
-const ColorEnProcesoEnReferenciaEnPedido = require('./colorProcesoReferenciaPedidoModel')
+// const ColorEnProcesoEnReferenciaEnPedido = require('./colorProcesoReferenciaPedidoModel')
 
 const TallaColorProcesoReferenciaPedidoModel = sequelize.define('TallaEnColorEnProcesoEnReferenciaEnPedido', {
   color: {
@@ -11,7 +11,7 @@ const TallaColorProcesoReferenciaPedidoModel = sequelize.define('TallaEnColorEnP
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      isIn: ['S', 'M', 'L', 'XL'],
+      isIn: [['S', 'M', 'L', 'XL']],
     },
   },
   cantidad: {
@@ -26,9 +26,9 @@ const TallaColorProcesoReferenciaPedidoModel = sequelize.define('TallaEnColorEnP
     type: DataTypes.INTEGER,
     allowNull: true,
     defaultValue: 0,
-  },
+  },  
 
-  cantHecha: {
+  cantHecha: {    
     type: DataTypes.INTEGER,
     allowNull: true,
     defaultValue: 0,
@@ -37,6 +37,6 @@ const TallaColorProcesoReferenciaPedidoModel = sequelize.define('TallaEnColorEnP
   
 });
 
-TallaColorProcesoReferenciaPedidoModel.belongsTo(ColorEnProcesoEnReferenciaEnPedido, { foreignKey: 'color' });
+// TallaColorProcesoReferenciaPedidoModel.belongsTo(ColorEnProcesoEnReferenciaEnPedido, { foreignKey: 'color' });
 
 module.exports = TallaColorProcesoReferenciaPedidoModel;

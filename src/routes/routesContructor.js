@@ -12,11 +12,10 @@ const detalleCompraRoute = require('./compraRoute/detalleCompraRoute')
 const usuarioRoute = require('./usuarioRoute/usuarioRoute')
 const ventaRoute = require('../routes/ventaRoute/ventaRoute')
 const abonoVentaRoute = require('./abonoVentaRoute/abonoVentaRoute')
-// Ruta empleado
 const empleadoRoutes = require('./empleadoRoute/empleadoRoute');
-// Rutas producción
 const asignarProcedimientoRoute = require('./produccionRoute/asignarProcedimientoRoute');
 const reporteProduccionRoute = require('./produccionRoute/reporteProduccionRoute');
+const pedidoCompletoRoute = require('./pedidoRoutes/pedidoCompletoRoute')
 
 
 function configureRoutes(app, path) {
@@ -34,13 +33,10 @@ function configureRoutes(app, path) {
     app.use(path, usuarioRoute);
     app.use(path, ventaRoute);
     app.use(path, abonoVentaRoute);
-
-    // Ruta empleado
     app.use(path, empleadoRoutes);
-    
-    //Rutas producción
     app.use(path, asignarProcedimientoRoute);
     app.use(path, reporteProduccionRoute);
+    app.use(path, pedidoCompletoRoute); 
     }
 
 module.exports = configureRoutes;
