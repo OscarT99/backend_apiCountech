@@ -12,11 +12,7 @@ const detalleCompraRoute = require('./compraRoute/detalleCompraRoute')
 const usuarioRoute = require('./usuarioRoute/usuarioRoute')
 const ventaRoute = require('../routes/ventaRoute/ventaRoute')
 const abonoVentaRoute = require('./abonoVentaRoute/abonoVentaRoute')
-<<<<<<< HEAD
-=======
 const abonoCompraRoute = require('./abonoCompraRoute/abonoCompraRoute')
-// Ruta empleado
->>>>>>> 5439d8f66f352f2ab88e72fc5542cb8f19e7d096
 const empleadoRoutes = require('./empleadoRoute/empleadoRoute');
 const asignarProcedimientoRoute = require('./produccionRoute/asignarProcedimientoRoute');
 const reporteProduccionRoute = require('./produccionRoute/reporteProduccionRoute');
@@ -38,12 +34,7 @@ function configureRoutes(app, path) {
     app.use(path, usuarioRoute);
     app.use(path, ventaRoute);
     app.use(path, abonoVentaRoute);
-<<<<<<< HEAD
-=======
     app.use(path, abonoCompraRoute);
-
-    // Ruta empleado
->>>>>>> 5439d8f66f352f2ab88e72fc5542cb8f19e7d096
     app.use(path, empleadoRoutes);
     app.use(path, asignarProcedimientoRoute);
     app.use(path, reporteProduccionRoute);
