@@ -59,6 +59,13 @@ const CompraModel = sequelize.define('Compra',{
           isIn: [['Contado', 'Crédito']],
         },
     },
+    estadoPago: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isIn: [['Pago', 'Pendiente']],
+        },
+    }
 })
 
 CompraModel.belongsTo(Proveedor,{foreignKey:'proveedor'})
