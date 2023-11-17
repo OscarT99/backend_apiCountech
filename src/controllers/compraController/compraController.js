@@ -1,11 +1,11 @@
 const { response } = require('express');
-const CompraModel = require('../../models/compraModel/compraModel');
+const Compra = require('../../models/compraModel/compraModel');
 const Proveedor = require('../../models/proveedorModel/proveedorModel');
 
 const getCompras = async (req, res = response) => {
     try {
-        const listCompras = await CompraModel.findAll({
-            include: Proveedor,
+        const listCompras = await Compra.findAll({
+            include: Proveedor,            
         });
         res.json({ listCompras });
     } catch (error) {
@@ -20,7 +20,7 @@ const getCompras = async (req, res = response) => {
 const getCompra = async (req, res = response) => {
     try {
         const { id } = req.params;
-        const compra = await CompraModel.findByPk(id, {
+        const compra = await Compra.findByPk(id, {
             include: Proveedor,
         });
 
@@ -45,7 +45,6 @@ const postCompra = async (req, res = response) => {
     try {
         const { body } = req;
 
-        // Validaciones para cada atributo con mensajes de error personalizados
         if (!body.proveedor) {
             return res.status(400).json({ error: 'El campo proveedor es obligatorio.' });
         }
@@ -57,7 +56,7 @@ const postCompra = async (req, res = response) => {
         if (!body.numeroFactura) {
             return res.status(400).json({ error: 'El campo numeroFactura es obligatorio.' });
         } else {
-            const existingCompra = await CompraModel.findOne({ where: { numeroFactura: body.numeroFactura } });
+            const existingCompra = await Compra.findOne({ where: { numeroFactura: body.numeroFactura } });
             if (existingCompra) {
                 return res.status(400).json({ error: 'La compra con ese número de factura ya existe.' });
             }
@@ -82,7 +81,7 @@ const postCompra = async (req, res = response) => {
         }
 
         // Crear la compra
-        await CompraModel.create(body);
+        await Compra.create(body);
 
         res.status(201).json({
             success: true,
@@ -101,7 +100,7 @@ const putCompra = async (req, res = response) => {
     try {
         const { body } = req;
         const { id } = req.params;
-        const compra = await CompraModel.findByPk(id);
+        const compra = await Compra.findByPk(id);
 
         if (!compra) {
             return res.status(404).json({ success: false, error: `No existe una compra con el id ${id}` });
@@ -119,7 +118,7 @@ const putCompra = async (req, res = response) => {
         if (!body.numeroFactura) {
             return res.status(400).json({ error: 'El campo numeroFactura es obligatorio.' });
         } else if (body.numeroFactura !== compra.numeroFactura) {
-            const existingCompra = await CompraModel.findOne({ where: { numeroFactura: body.numeroFactura } });
+            const existingCompra = await Compra.findOne({ where: { numeroFactura: body.numeroFactura } });
             if (existingCompra) {
                 return res.status(400).json({ error: 'La compra con ese número de factura ya existe.' });
             }
@@ -162,7 +161,7 @@ const putCompra = async (req, res = response) => {
 const deleteCompra = async (req, res = response) => {
     try {
         const { id } = req.params;
-        const compra = await CompraModel.findByPk(id);
+        const compra = await Compra.findByPk(id);
 
         if (!compra) {
             return res.status(404).json({ success: false, error: `No existe una compra con el id ${id}` });

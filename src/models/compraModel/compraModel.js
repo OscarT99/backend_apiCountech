@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../../database/config');
 const Proveedor = require('../proveedorModel/proveedorModel')
+const detalleCompra = require('./detalleCompraModel')
 
 const CompraModel = sequelize.define('Compra',{
     proveedor:{
@@ -11,7 +12,7 @@ const CompraModel = sequelize.define('Compra',{
         }
     },
     fechaCompra:{
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
         validate: {
             notNull: true,
@@ -19,7 +20,7 @@ const CompraModel = sequelize.define('Compra',{
         },
     },
     fechaRegistro: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         defaultValue: DataTypes.NOW,
         validate: {
           isDate: true,
@@ -27,8 +28,7 @@ const CompraModel = sequelize.define('Compra',{
     },
     numeroFactura: {
         type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
+        allowNull: false,        
     },    
     totalBruto:{
         type: DataTypes.DECIMAL(10, 2),
@@ -38,11 +38,7 @@ const CompraModel = sequelize.define('Compra',{
         },
     },
     iva:{
-        type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
-        validate: {
-            min: 1,
-        },
+        type: DataTypes.DECIMAL(10, 2),        
     },
     totalNeto:{
         type: DataTypes.DECIMAL(10, 2),
@@ -62,6 +58,7 @@ const CompraModel = sequelize.define('Compra',{
     estadoPago: {
         type: DataTypes.STRING,
         allowNull: false,
+        defaultValue: 'Pendiente',
         validate: {
           isIn: [['Pago', 'Pendiente']],
         },
@@ -69,5 +66,6 @@ const CompraModel = sequelize.define('Compra',{
 })
 
 CompraModel.belongsTo(Proveedor,{foreignKey:'proveedor'})
+CompraModel.hasMany(detalleCompra,{foreignKey: 'compra'})
 
 module.exports = CompraModel;

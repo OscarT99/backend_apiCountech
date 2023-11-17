@@ -17,9 +17,15 @@ const validarPedido = async (body, res = response) => {
         if (!body.ordenTrabajo) {
             return res.status(400).json({ error: 'El campo ordenTrabajo es obligatorio.' });
         } else {
-            const existingPedido = await Pedido.findOne({ where: { ordenTrabajo: body.ordenTrabajo } });
+            const existingPedido = await Pedido.findOne({
+                 where:
+                  {
+                     ordenTrabajo: body.ordenTrabajo,
+                     cliente: body.cliente                    
+                    }
+                     });
             if (existingPedido) {
-                return res.status(400).json({ error: 'La orden de trabajo ya existe.' });
+                return res.status(400).json({ error: 'La orden de trabajo ya está asociada al cliente especificado.' });
             }
 
             if (!/^\d{1,10}$/.test(body.ordenTrabajo)) {
@@ -57,9 +63,7 @@ const validarPedido = async (body, res = response) => {
             return res.status(400).json({ error: 'Forma de pago no válida. Solo se permite "Contado" o "Crédito".' });
         }
 
-        if (!body.valorTotal) {
-            return res.status(400).json({ error: 'El campo valorTotal es obligatorio.' });
-        } else if (isNaN(body.valorTotal) || body.valorTotal <= 0) {
+        if (isNaN(body.valorTotal) || body.valorTotal < 1) {
             return res.status(400).json({ error: 'Valor total no válido. Debe ser un número mayor a 0.' });
         }
 
@@ -204,7 +208,6 @@ const validarPedido = async (body, res = response) => {
 
     } catch (error) {
         console.error(error);
-        // Si hay un error, devuelve un objeto con el mensaje de error
         return { success: false, error: 'Ocurrió un error en la validación del pedido' };        
     }
 

@@ -1,9 +1,8 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../../database/config');
 const Insumo = require('../insumoModel/insumoModel')
-const Compra = require('./compraModel')
 
-const DetalleCompraModel = sequelize.define('DetalleCompra',{
+const DetalleCompraModel = sequelize.define('DetalleEnCompra',{
     compra:{
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -33,11 +32,7 @@ const DetalleCompraModel = sequelize.define('DetalleCompra',{
         },
     },
     impuestoIva:{
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-            min: 1,
-        },
+        type: DataTypes.INTEGER,        
     },
     valorTotal:{
         type: DataTypes.DECIMAL(10, 2),
@@ -48,7 +43,6 @@ const DetalleCompraModel = sequelize.define('DetalleCompra',{
     }
 })
 
-DetalleCompraModel.belongsTo(Compra,{foreignKey:'compra'})
 DetalleCompraModel.belongsTo(Insumo,{foreignKey:'insumo'})
 
 module.exports = DetalleCompraModel;

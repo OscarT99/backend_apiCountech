@@ -54,11 +54,7 @@ const postCategoriaInsumo = async (req, res = response) => {
         if (body.cantidad !== undefined && !/^\d+$/.test(body.cantidad)) {
             return res.status(400).json({ success: false, error: 'Cantidad no válida. Solo se permiten números.' });
         }
-
-        if (body.estado === null || typeof body.estado !== 'boolean') {
-            return res.status(400).json({ error: 'El campo estado debe ser un valor booleano (true o false).' });
-        }
-
+        
         await CategoriaInsumo.create(body);
         res.status(201).json({
             success: true,
@@ -89,11 +85,7 @@ const putCategoriaInsumo = async (req, res = response) => {
             if (body.cantidad !== undefined && !/^\d+$/.test(body.cantidad)) {
                 return res.status(400).json({ success: false, error: 'Cantidad no válida. Solo se permiten números.' });
             }
-
-            if (body.estado === null || typeof body.estado !== 'boolean') {
-                return res.status(400).json({ error: 'El campo estado debe ser un valor booleano (true o false).' });
-            }
-
+        
             await categoria.update(body);
             res.json({
                 success: true,
