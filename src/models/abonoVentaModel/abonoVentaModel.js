@@ -8,7 +8,7 @@ const AbonoVenta = sequelize.define('AbonoVenta', {
       allowNull: false,
     },
     fechaAbono: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     valorAbono: {
@@ -17,12 +17,7 @@ const AbonoVenta = sequelize.define('AbonoVenta', {
       validate: {
         min: 0,
       },
-    },
-    estado: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true,
-    }
-    
+    }    
   });
   
   // foreign key

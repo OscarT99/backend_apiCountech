@@ -8,7 +8,7 @@ const AbonoCompra = sequelize.define('AbonoCompra', {
       allowNull: false,
     },
     fechaAbono: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     valorAbono: {
