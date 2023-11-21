@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../../database/config');
-const Pedido = require('./pedidoModel')
+// const Pedido = require('./pedidoModel')
+const ProcesoEnReferenciaEnPedido = require('./procesoReferenciaPedidoModel')
 
 const ReferenciaPedidoModel = sequelize.define('ReferenciaEnPedido', {
   pedido: {
@@ -10,7 +11,6 @@ const ReferenciaPedidoModel = sequelize.define('ReferenciaEnPedido', {
   referencia: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
     validate: {
       is: /^[0-9]+/,
     },
@@ -36,6 +36,8 @@ const ReferenciaPedidoModel = sequelize.define('ReferenciaEnPedido', {
 });
 
 
-ReferenciaPedidoModel.belongsTo(Pedido, { foreignKey: 'pedido' });
+// ReferenciaPedidoModel.belongsTo(Pedido, { foreignKey: 'pedido' });
+ReferenciaPedidoModel.hasMany(ProcesoEnReferenciaEnPedido, { foreignKey: 'referencia' });
+
 
 module.exports = ReferenciaPedidoModel;

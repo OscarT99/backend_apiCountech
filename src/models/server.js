@@ -13,7 +13,14 @@ class Server{
         this.path = '/api'
         this.middlewares()  
         this.routes()
+        
     }
+
+    async synchronizeModels() {
+        await Cliente.sync();
+        await PedidoModel.sync();
+        await ReferenciaPedidoModel.sync();
+      }
 
     listen(){
         this.app.listen(this.port,()=>{

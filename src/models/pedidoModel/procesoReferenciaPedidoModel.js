@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../../database/config');
-const ReferenciaEnPedido = require('./referenciaPedidoModel')
+// const ReferenciaEnPedido = require('./referenciaPedidoModel')
+const ColorProcesoReferenciaPedido = require('./colorProcesoReferenciaPedidoModel') 
 
 const ProcesoReferenciaPedidoModel = sequelize.define('ProcesoEnReferenciaEnPedido', {
   referencia: {
@@ -27,6 +28,8 @@ const ProcesoReferenciaPedidoModel = sequelize.define('ProcesoEnReferenciaEnPedi
   },
 });
 
-ProcesoReferenciaPedidoModel.belongsTo(ReferenciaEnPedido, { foreignKey: 'referencia' });
+// ProcesoReferenciaPedidoModel.belongsTo(ReferenciaEnPedido, { foreignKey: 'referencia' });
+ProcesoReferenciaPedidoModel.hasMany(ColorProcesoReferenciaPedido, { foreignKey: 'proceso' });
+
 
 module.exports = ProcesoReferenciaPedidoModel;

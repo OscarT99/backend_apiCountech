@@ -112,10 +112,6 @@ const postCliente = async (req, res = response) => {
             return res.status(400).json({ error: 'Correo no válido.' });
         }
 
-        if (body.estado === null || typeof body.estado !== 'boolean') {
-            return res.status(400).json({ error: 'El campo estado debe ser un valor booleano (true o false).' });
-        }
-
         await Cliente.create(body);
 
         res.status(201).json({
@@ -205,12 +201,7 @@ const putCliente = async (req, res = response) => {
         } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/.test(body.correo)) {
             return res.status(400).json({ error: 'Correo no válido.' });
         }
-
-        if (body.estado === null || typeof body.estado !== 'boolean') {
-            return res.status(400).json({ error: 'El campo estado debe ser un valor booleano (true o false).' });
-        }
-
-        // Actualizar el cliente
+        
         await cliente.update(body);
 
         res.status(200).json({

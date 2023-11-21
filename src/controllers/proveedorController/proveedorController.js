@@ -113,10 +113,7 @@ const postProveedor = async (req, res = response) => {
             return res.status(400).json({ error: 'Correo no válido.' });
         }
 
-        if (body.estado === null || typeof body.estado !== 'boolean') {
-            return res.status(400).json({ error: 'El campo estado debe ser un valor booleano (true o false).' });
-        }
-       
+               
         await Proveedor.create(body);
 
         res.status(201).json({
@@ -207,11 +204,7 @@ const putProveedor = async (req, res = response) => {
             return res.status(400).json({ error: 'Correo no válido.' });
         }
 
-        if (body.estado === null || typeof body.estado !== 'boolean') {
-            return res.status(400).json({ error: 'El campo estado debe ser un valor booleano (true o false).' });
-        }
-
-        // Actualizar el proveedor
+        
         await proveedor.update(body);
 
         res.status(200).json({
