@@ -240,10 +240,22 @@ const deleteCliente = async (req, res = response) => {
     }
 }
 
+const buscarClientes = async (req, res = response) => {
+    try {
+        const terminoBusqueda = req.query.termino;
+        const clientesEncontrados = await Cliente.buscarClientes(terminoBusqueda);
+        res.json(clientesEncontrados);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error en el servidor' });
+    }
+};
+
 module.exports = {
     getClientes,
     getCliente,
     postCliente,
     deleteCliente,
-    putCliente
+    putCliente,
+    buscarClientes
 }
