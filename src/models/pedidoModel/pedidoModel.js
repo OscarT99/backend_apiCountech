@@ -77,7 +77,7 @@ const PedidoModel = sequelize.define('Pedido', {
     },
   },
   fechaVenta: {
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
   allowNull: true,
   },
 });

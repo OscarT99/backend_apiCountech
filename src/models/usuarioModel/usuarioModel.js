@@ -24,12 +24,13 @@ const Usuario = sequelize.define('Usuario', {
     validate: {
       is: /^[a-zA-Z0-9.-_]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+/,
     },
+    unique: true,
   },
   contrasena: {
-    type: DataTypes.STRING(20),
+    type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      len: [8, 20],
+      min: 8,
     },
   },
   estado: {

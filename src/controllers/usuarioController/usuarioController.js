@@ -1,5 +1,5 @@
 const {response} = require('express')
-//const bcrypt = require('bcrypt')//Encriptar contraseñas
+const bcrypt = require('bcryptjs')//Encriptar contraseñas
 const Usuario = require('../../models/usuarioModel/usuarioModel')
 
 
@@ -36,7 +36,7 @@ const getUsuario = async (req, res = response) => {
     }    
 }
 
-/*
+
 // Número de rondas de sal para el hash
 const saltRounds = 10; 
 
@@ -62,23 +62,7 @@ const postUsuario = async (req, res = response) => {
     });
   }
 };
-*/
 
-const postUsuario = async (req, res = response) => {    
-    try{
-        const { body } = req;
-        await Usuario.create(body)
-
-        res.json({
-            msg:`El usuario fue creado exitosamente`
-        })
-    }catch(error){
-        console.log(error)
-        res.json({
-            msg:`Upps ocurrio un error`
-        })
-    }
-}
 
 //Modificar email, contraseña y estado
 const putUsuario = async (req, res = response) => {    

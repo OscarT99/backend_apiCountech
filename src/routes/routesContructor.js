@@ -18,6 +18,7 @@ const asignarProcedimientoRoute = require('./produccionRoute/asignarProcedimient
 const reporteProduccionRoute = require('./produccionRoute/reporteProduccionRoute');
 const pedidoCompletoRoute = require('./pedidoRoutes/pedidoCompletoRoute')
 const compraCompletoRoute = require('./compraRoute/compraCompletoRoute')
+const authRoute = require('./authRoute/authRoute');
 
 function configureRoutes(app, path) {
     app.use(path, clienteRoutes);
@@ -39,7 +40,9 @@ function configureRoutes(app, path) {
     app.use(path, asignarProcedimientoRoute);
     app.use(path, reporteProduccionRoute);
     app.use(path, pedidoCompletoRoute);
-    app.use(path, compraCompletoRoute); 
+    app.use(path, compraCompletoRoute);
+    app.use(path, authRoute); 
+
     }
 
 module.exports = configureRoutes;
