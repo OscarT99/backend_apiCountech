@@ -51,11 +51,11 @@ const postPedido = async (req, res = response) => {
             }
         }
 
-        if (!body.contacto) {
-            return res.status(400).json({ error: 'El campo contacto es obligatorio.' });
-        } else if (!/^[A-Za-záéíóúüÜÁÉÍÓÑñ. ]+$/.test(body.contacto)) {
-            return res.status(400).json({ error: 'Contacto no válido. Solo se permiten letras, tildes y puntos.' });
-        }
+        // if (!body.contacto) {
+        //     return res.status(400).json({ error: 'El campo contacto es obligatorio.' });
+        // } else if (!/^[A-Za-záéíóúüÜÁÉÍÓÑñ. ]+$/.test(body.contacto)) {
+        //     return res.status(400).json({ error: 'Contacto no válido. Solo se permiten letras, tildes y puntos.' });
+        // }
 
         if (!body.ordenTrabajo) {
             return res.status(400).json({ error: 'El campo ordenTrabajo es obligatorio.' });

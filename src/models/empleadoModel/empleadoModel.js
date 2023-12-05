@@ -75,6 +75,7 @@ const EmpleadoModel = sequelize.define("Empleado", {
   fechaIngreso: {
     type: DataTypes.DATEONLY,
     allowNull: false,
+    defaultValue: DataTypes.NOW,
   },
 
   estado: {
