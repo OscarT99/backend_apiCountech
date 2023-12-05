@@ -51,12 +51,7 @@ const PedidoModel = sequelize.define('Pedido', {
   },
   valorTotal: {
     type: DataTypes.DECIMAL(10, 2),
-    allowNull: false,
-    validate: {
-      notNull: true,
-      isDecimal: true,
-      min: 1,
-    },
+    
   },
   observaciones: {
     type: DataTypes.STRING,

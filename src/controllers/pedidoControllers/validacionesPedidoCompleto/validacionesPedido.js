@@ -62,18 +62,15 @@ const validarPedido = async (body, res = response) => {
         } else if (!['Contado', 'Crédito'].includes(body.formaPago)) {
             return res.status(400).json({ error: 'Forma de pago no válida. Solo se permite "Contado" o "Crédito".' });
         }
+     
 
-        if (isNaN(body.valorTotal) || body.valorTotal < 1) {
-            return res.status(400).json({ error: 'Valor total no válido. Debe ser un número mayor a 0.' });
-        }
-
-        if (!body.referenciaEnPedido || body.referenciaEnPedido.length === 0) {
+        if (!body.ReferenciaEnPedidos || body.ReferenciaEnPedidos.length === 0) {
             return res.status(400).json({ error: 'Debe ingresar al menos una referencia en el pedido.' });
         }
 
         const nombresReferenciasUtilizados = new Set();
 
-        for (const referenciaData of body.referenciaEnPedido || []) {
+        for (const referenciaData of body.ReferenciaEnPedidos || []) {
 
             const nombreReferencia = referenciaData.referencia;
 
@@ -111,13 +108,13 @@ const validarPedido = async (body, res = response) => {
                 return res.status(400).json({ error: 'Cantidad total no válida. Debe ser un número mayor a 0.' });
             }
 
-            if (!referenciaData.procesoEnReferencia || referenciaData.procesoEnReferencia.length === 0) {
+            if (!referenciaData.ProcesoEnReferenciaEnPedidos || referenciaData.ProcesoEnReferenciaEnPedidos.length === 0) {
                 return res.status(400).json({ error: `Debe ingresar al menos un proceso en la referencia "${nombreReferencia}".` });
             }
 
             const nombresProcesosUtilizados = new Set();
 
-            for (const procesoData of referenciaData.procesoEnReferencia || []) {
+            for (const procesoData of referenciaData.ProcesoEnReferenciaEnPedidos || []) {
 
                 const nombreProceso = procesoData.proceso;
 
@@ -143,7 +140,7 @@ const validarPedido = async (body, res = response) => {
                     return res.status(400).json({ error: 'Cantidad total no válida. Debe ser un número mayor a 0.' });
                 }
 
-                if (!procesoData.colorEnProceso || procesoData.colorEnProceso.length === 0) {
+                if (!procesoData.ColorEnProcesoEnReferenciaEnPedidos || procesoData.ColorEnProcesoEnReferenciaEnPedidos.length === 0) {
                     return res.status(400).json({ error: `Debe ingresar al menos un color en el proceso "${nombreProceso}".` });
                 }
 
@@ -173,13 +170,16 @@ const validarPedido = async (body, res = response) => {
                         return res.status(400).json({ error: 'Cantidad no válida. Solo se permiten números.' });
                     }
 
-                    if (!colorData.tallaEnColorEnProceso || colorData.tallaEnColorEnProceso.length === 0) {
+                    if (!colorData.TallaEnColorEnProcesoEnReferenciaEnPedidos
+                        || colorData.TallaEnColorEnProcesoEnReferenciaEnPedidos
+                        .length === 0) {
                         return res.status(400).json({ error: `Debe ingresar al menos una talla en el color "${nombreColor}".` });
                     }
 
                     const nombresTallasUtilizados = new Set();                    
 
-                    for (const tallaData of colorData.tallaEnColorEnProceso || []) {
+                    for (const tallaData of colorData.TallaEnColorEnProcesoEnReferenciaEnPedidos
+                        || []) {
 
                         const nombreTalla = tallaData.talla;
 
