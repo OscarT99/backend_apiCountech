@@ -65,22 +65,31 @@ const postUsuario = async (req, res = response) => {
 
 
 //Modificar email, contraseña y estado
-const putUsuario = async (req, res = response) => {    
+
+const putUsuario = async (req, res = response) => {
     try {
         const { body } = req;
         const { id } = req.params;
         const usuario = await Usuario.findByPk(id);
 
+
         if (usuario) {
             const { email, contrasena, estado } = body;
+
+            // Hashea la contraseña antes de guardarla en la base de datos
+            if (contrasena) {
+                const hashedPassword = await bcrypt.hash(contrasena, saltRounds);
+                body.contrasena = hashedPassword;
+            }
+
             await usuario.update({
                 email,
-                contrasena,
+                contrasena: body.contrasena,
                 estado
             });
 
             res.json({
-                msg: `El usuario fue actualizado exitosamente`
+                msg: `El usuario fue actualizado exitosamente`,
             });
         } else {
             res.json({

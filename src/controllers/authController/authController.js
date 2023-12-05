@@ -47,17 +47,15 @@ const login = async(req, res = response) => {
                 }, (err, token ) => {
                     if(err){
                         console.log(err);
-                        reject('Nose pudo generar el token')
+                        reject('No se pudo generar el token')
                     }else{
                         resolve(token);
                     }
                 })
             })
         }
-        
-        
+                
         const token = await generarJWT(usuario.id);
-
 
         res.json({
             usuario,

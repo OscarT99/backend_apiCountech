@@ -1,12 +1,20 @@
 const Sequelize = require('sequelize');
 const mysql2 = require('mysql2');
 
-
+/*
 const sequelize = new Sequelize('db_project_aws', 'admin', 'Default2023', {
   host: 'database-project.cz2io8dbm9oh.us-east-2.rds.amazonaws.com',
   dialect: 'mysql',
   dialectModule: mysql2,
-});
+});*/
+
+const sequelize = new Sequelize({
+    dialect:'mysql',
+    host:'localhost',
+    username:'root',
+    password:'11234',
+    database:'project2'
+})
 
 sequelize
     .authenticate()
