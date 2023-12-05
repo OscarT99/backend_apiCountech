@@ -33,7 +33,11 @@ const ReferenciaPedidoModel = sequelize.define('ReferenciaEnPedido', {
       min: 1,
     },
   },
-});
+  valorTotalReferencia: {    
+    type: DataTypes.DECIMAL(10, 2),
+  },
+},
+);
 
 
 // ReferenciaPedidoModel.belongsTo(Pedido, { foreignKey: 'pedido' });
