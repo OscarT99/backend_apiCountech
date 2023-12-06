@@ -4,8 +4,8 @@ const categoriaInsumo = require('../../models/insumoModel/categoriaInsumoModel')
 
 const getInsumos = async (req, res = response) => {
     try {
-        const insumos = await Insumo.findAll();
-        res.json({ insumos });
+        const listInsumos = await Insumo.findAll();
+        res.json({ listInsumos });
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -156,10 +156,22 @@ const deleteInsumo = async (req, res = response) => {
     }
 }
 
+const buscarInsumos = async (req, res = response) => {
+    try {
+        const terminoBusqueda = req.query.termino;
+        const InsumosEncontrados = await Insumo.buscarInsumos(terminoBusqueda);
+        res.json(InsumosEncontrados);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error en el servidor' });
+    }
+};
+
 module.exports = {
     getInsumos,
     getInsumo,
     postInsumo,
     putInsumo,
     deleteInsumo,
+    buscarInsumos
 };

@@ -59,7 +59,7 @@ const getCompraConRelacionesPorId = async (req, res = response) => {
             return res.status(404).json({ success: false, error: 'Compra no encontrada.' });
         }
 
-        res.json({ compra })
+        res.json( compra )
 
     }catch(error){
         console.log(error);

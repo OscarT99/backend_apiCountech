@@ -9,7 +9,6 @@ route.get('/cliente/:id',getCliente)
 route.post('/cliente',postCliente)
 route.put('/cliente/:id',putCliente)
 route.delete('/cliente/:id',deleteCliente)
-
 route.get('/cliente/buscar',buscarClientes)
 
 module.exports = route

@@ -151,7 +151,7 @@ const postPedidoCompleto = async (req, res = response,next) => {
                             });
 
                             // Crea las tallas en color en proceso
-                            if (colorData.tallaEnColorEnProceso) {
+                            if (colorData.TallaEnColorEnProcesoEnReferenciaEnPedidos) {
                                 for (const tallaData of colorData.TallaEnColorEnProcesoEnReferenciaEnPedidos
                                     ) {
                                     await TallaColorProcesoReferenciaPedido.create({

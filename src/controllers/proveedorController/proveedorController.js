@@ -246,10 +246,22 @@ const deleteProveedor = async (req, res = response) => {
     }
 }
 
+const buscarProveedores = async (req, res = response) => {
+    try {
+        const terminoBusqueda = req.query.termino;
+        const proveedoresEncontrados = await Proveedor.buscarProveedores(terminoBusqueda);
+        res.json(proveedoresEncontrados);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error en el servidor' });
+    }
+};
+
 module.exports = {
     getProveedores,
     getProveedor,
     postProveedor,
     putProveedor,
-    deleteProveedor
+    deleteProveedor,
+    buscarProveedores
 }
