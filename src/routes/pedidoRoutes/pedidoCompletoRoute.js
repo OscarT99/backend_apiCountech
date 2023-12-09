@@ -5,10 +5,10 @@ const route = Router()
 const { getAllPedidosConRelaciones,postPedidoCompleto, getPedidoConRelacionesPorId, putPedidoCompleto, deletePedidoCompleto } = require('../../controllers/pedidoControllers/pedidoCompletoController')
 
 
-route.get('/pedidos',getAllPedidosConRelaciones);
-route.get('/pedidos/:id',getPedidoConRelacionesPorId); 
-route.post('/pedidos',postPedidoCompleto);
-route.put('/pedidos/:id',putPedidoCompleto); 
-route.delete('/pedidos/:id',deletePedidoCompleto); 
+route.get('/pedido',getAllPedidosConRelaciones);
+route.get('/pedido/:id',getPedidoConRelacionesPorId); 
+route.post('/pedido',postPedidoCompleto);
+route.put('/pedido/:id',putPedidoCompleto); 
+route.delete('/pedido/:id',deletePedidoCompleto); 
 
 module.exports = route

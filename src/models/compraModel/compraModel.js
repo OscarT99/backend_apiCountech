@@ -57,11 +57,19 @@ const CompraModel = sequelize.define('Compra',{
     },
     estadoPago: {
         type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'Pendiente',
         validate: {
           isIn: [['Pago', 'Pendiente']],
         },
+    },
+    observaciones: {
+        type: DataTypes.STRING,
+    },
+    estadoCompra: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+    },
+    motivoDeAnulacion:{
+        type: DataTypes.STRING,
     }
 })
 
