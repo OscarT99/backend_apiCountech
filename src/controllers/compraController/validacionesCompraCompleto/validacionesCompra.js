@@ -25,7 +25,7 @@ const validarCompra = async(body, res = response) => {
                 }
             });
     
-            if (existingCompra ) {
+            if (existingCompra && body.id == null) {
                 return res.status(400).json({ error: 'Este número de factura ya está asociado al proveedor especificado.' });
             }
         }

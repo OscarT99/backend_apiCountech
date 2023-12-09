@@ -195,34 +195,6 @@ const putCompraCompleta = async (req, res = response, next) => {
     }
 };
 
-
-// const anularCompra = async (req, res = response) => {
-//     try {
-//         const { id } = req.params;
-//         const compra = await Compra.findByPk(id);
-
-//         if (compra) {
-//             compra.estadoCompra = !compra.estadoCompra;
-//             await compra.save();
-//             res.json({
-//                 success: true,
-//                 message: `La compra con numero factura ${compra.numeroFactura} fue anulada correctamente'}`,
-//             });
-//         } else {
-//             res.status(404).json({
-//                 success: false,
-//                 error: `No existe una compra con el id ${id}`,
-//             });
-//         }
-//     } catch (error) {
-//         console.error('Error al anular la compra:', error);
-//         res.status(500).json({
-//             success: false,
-//             error: 'Ocurrió un problema al anular la compra',
-//         });
-//     }
-// };
-
 const anularCompra = async (req, res = response) => {
     try {
         const { id } = req.params;

@@ -167,7 +167,7 @@ const buscarInsumos = async (req, res = response) => {
     }
 };
 
-const actualizarCantidadInsumo = async (req, res = response) => {
+const sumarCantidadInsumo = async (req, res = response) => {
     try {
       const { id } = req.params;
       const { nuevaCantidad } = req.body;
@@ -175,6 +175,36 @@ const actualizarCantidadInsumo = async (req, res = response) => {
   
       if (insumo) {
             insumo.cantidad += nuevaCantidad;
+            await insumo.save();
+  
+          res.json({
+            success: true,
+            message: 'Cantidad de insumo actualizada correctamente.',
+          });
+        
+      } else {
+        res.status(404).json({
+          success: false,
+          error: `No existe un insumo con el id ${id}`,
+        });
+      }
+    } catch (error) {
+      console.error('Error al actualizar la cantidad del insumo:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Ocurrió un problema al actualizar la cantidad del insumo',
+      });
+    }
+};
+
+const restarCantidadInsumo = async (req, res = response) => {
+    try {
+      const { id } = req.params;
+      const { nuevaCantidad } = req.body;
+      const insumo = await Insumo.findByPk(id);
+  
+      if (insumo) {
+            insumo.cantidad -= nuevaCantidad;
             await insumo.save();
   
           res.json({
@@ -231,6 +261,7 @@ module.exports = {
     putInsumo,
     deleteInsumo,
     buscarInsumos,
-    actualizarCantidadInsumo,
+    sumarCantidadInsumo,
+    restarCantidadInsumo,
     actualizarEstadoInsumo
 };
