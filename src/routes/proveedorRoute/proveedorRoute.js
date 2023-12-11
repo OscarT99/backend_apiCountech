@@ -5,6 +5,15 @@ const route = Router()
 
 const{ getProveedores, getProveedor, postProveedor, putProveedor, deleteProveedor } = require('../../controllers/proveedorController/proveedorController')
 
+route.get('/proveedor',getProveedores)
+route.get('/proveedor/:id',getProveedor)
+route.post('/proveedor',postProveedor)
+route.put('/proveedor/:id',putProveedor)
+route.delete('/proveedor/:id',deleteProveedor)
+
+
+
+/*
 route.get('/proveedor', [
     validarJWT
 ],getProveedores)
@@ -20,6 +29,6 @@ route.put('/proveedor/:id', [
 route.delete('/proveedor/:id', [
     validarJWT
 ],deleteProveedor)
-
+*/
 module.exports = route
 

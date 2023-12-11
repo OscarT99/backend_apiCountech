@@ -5,6 +5,17 @@ const route = Router()
 
 const { getInsumos, getInsumo, postInsumo, putInsumo, deleteInsumo } = require('../../controllers/insumoController/insumoController')
 
+
+
+route.get('/insumo',getInsumos)
+route.get('/insumo/:id',getInsumo)
+route.post('/insumo',postInsumo)
+route.put('/insumo/:id',putInsumo)
+route.delete('/insumo/:id',deleteInsumo)
+
+
+
+/*
 route.get('/insumo', [
     validarJWT
 ],getInsumos)
@@ -20,5 +31,6 @@ route.put('/insumo/:id', [
 route.delete('/insumo/:id', [
     validarJWT
 ],deleteInsumo)
+*/
 
 module.exports = route

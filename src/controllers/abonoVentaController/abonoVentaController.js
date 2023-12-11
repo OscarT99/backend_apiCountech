@@ -42,6 +42,7 @@ const postAbonoVenta = async (req, res) => {
         if (venta) {
             // Verifica las condiciones antes de crear el abono
             if (venta.formaPago === 'Crédito' && venta.estado === 'Terminado' && venta.estadoPago === 'Pendiente') {
+                
                 // Crea el abono y asocia automáticamente la venta a través de la clave foránea
                 const nuevoAbono = await AbonoVenta.create(body);
 

@@ -80,7 +80,7 @@ const getPedidoConRelacionesPorId = async (req, res = response) => {
             return res.status(404).json({ success: false, error: 'Pedido no encontrado.' });
         }
 
-        res.json({ pedido });
+        res.json(pedido);
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -101,6 +101,11 @@ const postPedidoCompleto = async (req, res = response,next) => {
             return next(res.status(400).json({ success: false, error: validationResponse.error }));
         }
 
+        let totalValorReferencia = 0;
+        for (const referenciaData of pedidoData.ReferenciaEnPedidos) {
+        const valorReferencia = referenciaData.cantidadTotal * referenciaData.valorUnitario;
+            totalValorReferencia += valorReferencia;
+        }
 
         const pedido = await Pedido.create({
             cliente: pedidoData.cliente,
@@ -108,24 +113,25 @@ const postPedidoCompleto = async (req, res = response,next) => {
             fechaOrdenTrabajo: pedidoData.fechaOrdenTrabajo,
             fechaEntregaOrden: pedidoData.fechaEntregaOrden,
             formaPago: pedidoData.formaPago,
-            valorTotal: pedidoData.valorTotal,
-            observaciones: pedidoData.observaciones
+            observaciones: pedidoData.observaciones,
+            valorTotal:totalValorReferencia
         });
-
-
+        
         // Crea las referencias en pedido
-        for (const referenciaData of pedidoData.referenciaEnPedido) {
+        for (const referenciaData of pedidoData.ReferenciaEnPedidos) {            
             const referenciaEnPedido = await ReferenciaEnPedido.create({
                 pedido: pedido.id,
                 referencia: referenciaData.referencia,
                 descripcion: referenciaData.descripcion,
                 valorUnitario: referenciaData.valorUnitario,
                 cantidadTotal: referenciaData.cantidadTotal,
+                valorTotalReferencia: referenciaData.cantidadTotal * referenciaData.valorUnitario
             });
 
+
             // Crea los procesos en referencia
-            if (referenciaData.procesoEnReferencia) {
-                for (const procesoData of referenciaData.procesoEnReferencia) {
+            if (referenciaData.ProcesoEnReferenciaEnPedidos) {
+                for (const procesoData of referenciaData.ProcesoEnReferenciaEnPedidos) {
                     const procesoEnReferencia = await ProcesoReferenciaPedido.create({
                         referencia: referenciaEnPedido.id,
                         proceso: procesoData.proceso,
@@ -135,8 +141,8 @@ const postPedidoCompleto = async (req, res = response,next) => {
                     });
 
                     // Crea los colores en proceso
-                    if (procesoData.colorEnProceso) {
-                        for (const colorData of procesoData.colorEnProceso) {
+                    if (procesoData.ColorEnProcesoEnReferenciaEnPedidos) {
+                        for (const colorData of procesoData.ColorEnProcesoEnReferenciaEnPedidos) {
                             const colorEnProceso = await ColorProcesoReferenciaPedido.create({
                                 proceso: procesoEnReferencia.id,
                                 color: colorData.color,
@@ -145,8 +151,9 @@ const postPedidoCompleto = async (req, res = response,next) => {
                             });
 
                             // Crea las tallas en color en proceso
-                            if (colorData.tallaEnColorEnProceso) {
-                                for (const tallaData of colorData.tallaEnColorEnProceso) {
+                            if (colorData.TallaEnColorEnProcesoEnReferenciaEnPedidos) {
+                                for (const tallaData of colorData.TallaEnColorEnProcesoEnReferenciaEnPedidos
+                                    ) {
                                     await TallaColorProcesoReferenciaPedido.create({
                                         color: colorEnProceso.id,
                                         talla: tallaData.talla,
@@ -177,22 +184,23 @@ const putPedidoCompleto = async (req, res = response, next) => {
     const pedidoData = req.body;
 
     try {
-        // Validar el pedido
         const validationResponse = await validarPedido(pedidoData, res);
 
         if (!validationResponse.success) {
-            // Si las validaciones fallan, envía un error al cliente
             return next(res.status(400).json({ success: false, error: validationResponse.error }));
         }
-
-        // Verificar si el pedido existe
         const existingPedido = await Pedido.findByPk(id);
 
         if (!existingPedido) {
             return res.status(404).json({ success: false, error: 'Pedido no encontrado.' });
         }
 
-        // Actualizar el pedido
+        let totalValorReferencia = 0;
+        for (const referenciaData of pedidoData.ReferenciaEnPedidos) {
+        const valorReferencia = referenciaData.cantidadTotal * referenciaData.valorUnitario;
+            totalValorReferencia += valorReferencia;
+        }
+
         await existingPedido.update({
             cliente: pedidoData.cliente,
             ordenTrabajo: pedidoData.ordenTrabajo,
@@ -201,10 +209,11 @@ const putPedidoCompleto = async (req, res = response, next) => {
             formaPago: pedidoData.formaPago,
             valorTotal: pedidoData.valorTotal,
             observaciones: pedidoData.observaciones,
+            valorTotal:totalValorReferencia
         });
 
         // Actualizar o crear las referencias en pedido
-        for (const referenciaData of pedidoData.referenciaEnPedido) {
+        for (const referenciaData of pedidoData.ReferenciaEnPedidos) {
             if (referenciaData.id) {
                 // Si tiene un ID, actualiza la referencia existente
                 const existingReferencia = await ReferenciaEnPedido.findByPk(referenciaData.id);
@@ -214,10 +223,11 @@ const putPedidoCompleto = async (req, res = response, next) => {
                         descripcion: referenciaData.descripcion,
                         valorUnitario: referenciaData.valorUnitario,
                         cantidadTotal: referenciaData.cantidadTotal,
+                        valorTotalReferencia: referenciaData.cantidadTotal * referenciaData.valorUnitario
                     });
 
                     // Actualizar o crear los procesos en referencia
-                    for (const procesoData of referenciaData.procesoEnReferencia) {
+                    for (const procesoData of referenciaData.ProcesoEnReferenciaEnPedidos) {
                         if (procesoData.id) {
                             // Actualizar proceso existente
                             const existingProceso = await ProcesoReferenciaPedido.findByPk(procesoData.id);
@@ -230,7 +240,7 @@ const putPedidoCompleto = async (req, res = response, next) => {
                                 });
 
                                 // Actualizar o crear los colores en proceso
-                                for (const colorData of procesoData.colorEnProceso) {
+                                for (const colorData of procesoData.ColorEnProcesoEnReferenciaEnPedidos) {
                                     if (colorData.id) {
                                         // Actualizar color existente
                                         const existingColor = await ColorProcesoReferenciaPedido.findByPk(colorData.id);
@@ -242,7 +252,8 @@ const putPedidoCompleto = async (req, res = response, next) => {
                                             });
 
                                             // Actualizar o crear las tallas en color en proceso
-                                            for (const tallaData of colorData.tallaEnColorEnProceso) {
+                                            for (const tallaData of colorData.TallaEnColorEnProcesoEnReferenciaEnPedidos
+                                                ) {
                                                 if (tallaData.id) {
                                                     // Actualizar talla existente
                                                     const existingTalla = await TallaColorProcesoReferenciaPedido.findByPk(tallaData.id);
@@ -274,7 +285,8 @@ const putPedidoCompleto = async (req, res = response, next) => {
                                         });
 
                                         // Crear las tallas en color en proceso
-                                        for (const tallaData of colorData.tallaEnColorEnProceso) {
+                                        for (const tallaData of colorData.TallaEnColorEnProcesoEnReferenciaEnPedidos
+                                            ) {
                                             await TallaColorProcesoReferenciaPedido.create({
                                                 color: nuevoColor.id,
                                                 talla: tallaData.talla,
@@ -296,7 +308,7 @@ const putPedidoCompleto = async (req, res = response, next) => {
                             });
 
                             // Crear los colores en proceso
-                            for (const colorData of procesoData.colorEnProceso) {
+                            for (const colorData of procesoData.ColorEnProcesoEnReferenciaEnPedidos) {
                                 // Crear nuevo color
                                 const nuevoColor = await ColorProcesoReferenciaPedido.create({
                                     proceso: nuevoProceso.id,
@@ -306,7 +318,8 @@ const putPedidoCompleto = async (req, res = response, next) => {
                                 });
 
                                 // Crear las tallas en color en proceso
-                                for (const tallaData of colorData.tallaEnColorEnProceso) {
+                                for (const tallaData of colorData.TallaEnColorEnProcesoEnReferenciaEnPedidos
+                                    ) {
                                     await TallaColorProcesoReferenciaPedido.create({
                                         color: nuevoColor.id,
                                         talla: tallaData.talla,
@@ -326,10 +339,11 @@ const putPedidoCompleto = async (req, res = response, next) => {
                     descripcion: referenciaData.descripcion,
                     valorUnitario: referenciaData.valorUnitario,
                     cantidadTotal: referenciaData.cantidadTotal,
+                    valorTotalReferencia: referenciaData.cantidadTotal * referenciaData.valorUnitario
                 });
 
                 // Crear los procesos en referencia
-                for (const procesoData of referenciaData.procesoEnReferencia) {
+                for (const procesoData of referenciaData.ProcesoEnReferenciaEnPedidos) {
                     // Crear nuevo proceso
                     const nuevoProceso = await ProcesoReferenciaPedido.create({
                         referencia: nuevaReferencia.id,
@@ -340,7 +354,7 @@ const putPedidoCompleto = async (req, res = response, next) => {
                     });
 
                     // Crear los colores en proceso
-                    for (const colorData of procesoData.colorEnProceso) {
+                    for (const colorData of procesoData.ColorEnProcesoEnReferenciaEnPedidos) {
                         // Crear nuevo color
                         const nuevoColor = await ColorProcesoReferenciaPedido.create({
                             proceso: nuevoProceso.id,
@@ -350,7 +364,8 @@ const putPedidoCompleto = async (req, res = response, next) => {
                         });
 
                         // Crear las tallas en color en proceso
-                        for (const tallaData of colorData.tallaEnColorEnProceso) {
+                        for (const tallaData of colorData.TallaEnColorEnProcesoEnReferenciaEnPedidos
+                            ) {
                             await TallaColorProcesoReferenciaPedido.create({
                                 color: nuevoColor.id,
                                 talla: tallaData.talla,
@@ -374,10 +389,76 @@ const putPedidoCompleto = async (req, res = response, next) => {
     }
 };
 
+const deletePedidoCompleto = async (req, res = response) => {
+    const { id } = req.params;
+
+    try {
+        // Buscar el pedido por su ID con todas las relaciones
+        const pedido = await Pedido.findByPk(id, {
+            include: [
+                {
+                    model: ReferenciaEnPedido,
+                    include: [
+                        {
+                            model: ProcesoReferenciaPedido,
+                            include: [
+                                {
+                                    model: ColorProcesoReferenciaPedido,
+                                    include: [
+                                        {
+                                            model: TallaColorProcesoReferenciaPedido,
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        });
+
+        if (!pedido) {
+            return res.status(404).json({ success: false, error: 'Pedido no encontrado.' });
+        }
+
+        // Eliminar todas las tallas relacionadas
+        for (const referencia of pedido.ReferenciaEnPedidos) {
+            for (const proceso of referencia.ProcesoEnReferenciaEnPedidos) {
+                for (const color of proceso.ColorEnProcesoEnReferenciaEnPedidos) {
+                    await TallaColorProcesoReferenciaPedido.destroy({
+                        where: { id: color.id },
+                    });
+                }
+            }
+        }
+
+        // Eliminar todas las relaciones
+        await ReferenciaEnPedido.destroy({
+            where: { id: pedido.id },
+        });
+
+        // Eliminar el pedido
+        await Pedido.destroy({
+            where: { id: pedido.id },
+        });
+
+        res.json({
+            success: true,
+            message: 'Pedido y sus relaciones eliminados exitosamente.',
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            error: 'Ocurrió un error al eliminar el pedido y sus relaciones.',
+        });
+    }
+};
 
 module.exports = {
     getAllPedidosConRelaciones,
     getPedidoConRelacionesPorId,
     postPedidoCompleto,
-    putPedidoCompleto
+    putPedidoCompleto,
+    deletePedidoCompleto
 }
