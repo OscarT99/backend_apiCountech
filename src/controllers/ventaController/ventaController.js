@@ -39,6 +39,48 @@ const getVenta = async (req, res = response) => {
     }
 }
 
+const getVenta1 = async (req, res = response) => {
+    const { id } = req.params
+    const venta = await Pedido.findByPk(id, {
+        include: [
+            {
+                model: Cliente,
+            },
+            {
+                model: ReferenciaEnPedido,
+                include: [
+                    {
+                        model: ProcesoReferenciaPedido,
+                        include: [
+                            {
+                                model: ColorProcesoReferenciaPedido,
+                                include: [
+                                    {
+                                        model: TallaColorProcesoReferenciaPedido,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+    });
+
+    if (venta) {
+        if (venta.estado === 'Terminado') {
+            res.json(venta);
+        } else {
+            res.status(404).json({
+                msg: `No existe una venta con el id ${id}`
+            });
+        }
+    } else {
+        res.status(404).json({
+            msg: `No existe una venta con el id ${id}`
+        })
+    }
+}
 
 const putVenta = async (req, res = response) => {
     const { body } = req;

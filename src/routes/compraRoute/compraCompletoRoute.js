@@ -1,5 +1,6 @@
 const Router = require('express')
 const { validarJWT } = require('../../middlewares/validar-jwt')
+
 const route = Router()
 
 const { getAllComprasConRelaciones, getCompraConRelacionesPorId, postCompraCompleta, putCompraCompleta, anularCompra } = require('../../controllers/compraController/compraCompletoController')

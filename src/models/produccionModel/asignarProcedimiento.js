@@ -1,16 +1,24 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../../database/config");
 
-const Empleado = require("../empleadoModel/empleadoModel");
-const Pedido = require("../pedidoModel/tallaColorProcesoReferenciaPedidoModel");
+const AsignarProcesoModel = sequelize.define("AsignarProceso", {
 
-const AsignarProcedimiento = sequelize.define("AsignarProcedimiento", {
-
-  idAsignarProcedimiento: {
+  idAsignarProceso: {
     type: DataTypes.INTEGER,
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
+  },
+
+  empleado: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },  
+
+  // Foreign Key del proceso
+  proceso: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
 
   fechaRegistro: {
@@ -31,23 +39,7 @@ const AsignarProcedimiento = sequelize.define("AsignarProcedimiento", {
     defaultValue: true,
   },
 
-  fkEmpleado: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-
-  fkPedido: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
 });
 
-AsignarProcedimiento.belongsTo(Empleado, {
-  foreignKey: "fkEmpleado",
-});
 
-AsignarProcedimiento.belongsTo(Pedido, {
-  foreignKey: "fkProduccion",
-});
-
-module.exports = AsignarProcedimiento;
+module.exports = AsignarProcesoModel;
