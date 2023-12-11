@@ -45,7 +45,7 @@ const validarCompra = async(body, res = response) => {
             return res.status(400).json({ error: 'Debe ingresar al menos un insumo en la compra.' });
         }
 
-        for(const detalleData of body.detalleEnCompras || []){
+        for(const detalleData of body.DetalleEnCompras || []){
                                 
             if (!detalleData.insumo) {
                 return res.status(400).json({ error: 'El campo insumo es obligatorio.' });
