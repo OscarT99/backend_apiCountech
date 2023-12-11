@@ -152,17 +152,21 @@ const putCompraCompleta = async (req, res = response, next) => {
             iva: compraData.iva,
             totalNeto: compraData.totalNeto,
             formaPago: compraData.formaPago,
-            estadoPago:estadoPago
+            estadoPago: estadoPago
         });
 
         // Actualizar detalles de compra existentes o agregar nuevos detalles
         for (const detalleCompraData of compraData.DetalleEnCompras) {
+            console.log('Detalle a actualizar:', detalleCompraData);
+
             const existingDetalle = await DetalleEnCompra.findOne({
                 where: {
                     compra: existingCompra.id,
                     insumo: detalleCompraData.insumo
                 }
             });
+
+            console.log('Buscando detalle existente:', existingCompra.id, detalleCompraData.insumo);
 
             if (existingDetalle) {
                 // Si el detalle ya existe, actualizarlo
@@ -194,6 +198,7 @@ const putCompraCompleta = async (req, res = response, next) => {
         next({ success: false, error: 'Ocurrió un error al actualizar la compra completa' });
     }
 };
+
 
 const anularCompra = async (req, res = response) => {
     try {
