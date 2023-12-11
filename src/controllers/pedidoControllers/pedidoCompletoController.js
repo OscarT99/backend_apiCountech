@@ -5,6 +5,8 @@ const ReferenciaEnPedido = require('../../models/pedidoModel/referenciaPedidoMod
 const ProcesoReferenciaPedido = require('../../models/pedidoModel/procesoReferenciaPedidoModel');
 const ColorProcesoReferenciaPedido = require('../../models/pedidoModel/colorProcesoReferenciaPedidoModel');
 const TallaColorProcesoReferenciaPedido = require('../../models/pedidoModel/tallaColorProcesoReferenciaPedidoModel');
+const AsignarProceso = require('../../models/produccionModel/asignarProcedimiento');
+const Empleado = require('../../models/empleadoModel/empleadoModel');
 
 const { validarPedido } = require('./validacionesPedidoCompleto/validacionesPedido')
 
@@ -18,10 +20,20 @@ const getAllPedidosConRelaciones = async (req, res = response) => {
                 {
                     model: ReferenciaEnPedido,
                     include: [
+
                         {
                             model: ProcesoReferenciaPedido,
                             include: [
                                 {
+                                    model: AsignarProceso,
+                                    // include: [
+                                    //     {
+                                    //         model: Empleado,
+                                    //     }
+                                    // ]
+                                },
+                                {
+
                                     model: ColorProcesoReferenciaPedido,
                                     include: [
                                         {

@@ -78,6 +78,35 @@ const postProcesoEnReferenciaEnPedido = async (req, res = response) => {
     }
 }
 
+const putProcesoCantidad = async (req, res = response) => {
+    try {
+        const { id } = req.params;
+        const { body } = req;
+        const proceso = await ProcesoEnReferenciaEnPedido.findByPk(id);
+
+        if (proceso) {
+            await proceso.update(body);
+
+            res.json({
+                success: true,
+                message: 'El proceso en referencia en pedido fue actualizado correctamente.',
+            });
+        } else {
+            res.status(404).json({
+                success: false,
+                error: `No existe un proceso en referencia en pedido con el id ${id}`,
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            error: 'Ocurrió un problema al actualizar el proceso en referencia en pedido',
+        });
+    }
+}
+
+
 const putProcesoEnReferenciaEnPedido = async (req, res = response) => {
     try {
         const { id } = req.params;
@@ -160,5 +189,6 @@ module.exports = {
     getProcesosEnReferenciaEnPedido,
     postProcesoEnReferenciaEnPedido,
     putProcesoEnReferenciaEnPedido,
-    deleteProcesoEnReferenciaEnPedido
+    deleteProcesoEnReferenciaEnPedido,
+    putProcesoCantidad
 };

@@ -1,7 +1,8 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../../database/config');
 // const ReferenciaEnPedido = require('./referenciaPedidoModel')
-const ColorProcesoReferenciaPedido = require('./colorProcesoReferenciaPedidoModel') 
+const ColorProcesoReferenciaPedido = require('./colorProcesoReferenciaPedidoModel')
+const AsignarProceso =  require('../produccionModel/asignarProcedimiento') 
 
 const ProcesoReferenciaPedidoModel = sequelize.define('ProcesoEnReferenciaEnPedido', {
   referencia: {
@@ -23,13 +24,40 @@ const ProcesoReferenciaPedidoModel = sequelize.define('ProcesoEnReferenciaEnPedi
     type: DataTypes.INTEGER,
     allowNull: false,
     validate: {
-      min: 1,
+      min: 0,
     },
   },
+  cantidadAsignada: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    validate: {
+      min: 0,
+    },
+  },
+  cantidadHecha: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    validate: {
+      min: 0,
+    },
+  },
+  cantidadPendiente: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  estado: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    allowNull: true,
+  },
+
+  // PENDIENTE Registrar la cantidad asignada, terminada, pendiente y estado
+
 });
 
 // ProcesoReferenciaPedidoModel.belongsTo(ReferenciaEnPedido, { foreignKey: 'referencia' });
 ProcesoReferenciaPedidoModel.hasMany(ColorProcesoReferenciaPedido, { foreignKey: 'proceso' });
+ProcesoReferenciaPedidoModel.hasMany(AsignarProceso, { foreignKey: 'proceso' });
 
 
 module.exports = ProcesoReferenciaPedidoModel;
