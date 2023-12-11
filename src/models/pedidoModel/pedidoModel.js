@@ -75,6 +75,13 @@ const PedidoModel = sequelize.define('Pedido', {
     type: DataTypes.DATEONLY,
   allowNull: true,
   },
+  estadoPedido: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+  },
+  motivoDeAnulacion:{
+    type: DataTypes.STRING,
+  }
 });
 
 

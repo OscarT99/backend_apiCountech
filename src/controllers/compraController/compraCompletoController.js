@@ -59,7 +59,7 @@ const getCompraConRelacionesPorId = async (req, res = response) => {
             return res.status(404).json({ success: false, error: 'Compra no encontrada.' });
         }
 
-        res.json({ compra })
+        res.json( compra )
 
     }catch(error){
         console.log(error);
@@ -80,6 +80,13 @@ const postCompraCompleta = async (req, res = response,next) => {
             return next(res.status(400).json({success:false, error:validationResponse.error }))
         }
 
+        let estadoPago = '';
+        if (compraData.formaPago == 'Contado') {
+            estadoPago = 'Pago';
+        } else {
+            estadoPago = 'Pendiente';
+        }
+
         const compra = await Compra.create({
             proveedor: compraData.proveedor,
             fechaCompra: compraData.fechaCompra,
@@ -87,11 +94,11 @@ const postCompraCompleta = async (req, res = response,next) => {
             totalBruto: compraData.totalBruto,
             iva: compraData.iva,
             totalNeto: compraData.totalNeto,
-            formaPago : compraData.formaPago
-
+            formaPago : compraData.formaPago,
+            estadoPago:estadoPago
         })
 
-        for(const detalleCompraData of compraData.detalleEnCompras){
+        for(const detalleCompraData of compraData.DetalleEnCompras){
              await DetalleEnCompra.create({
                 compra: compra.id,
                 insumo: detalleCompraData.insumo,
@@ -108,7 +115,7 @@ const postCompraCompleta = async (req, res = response,next) => {
         });
     }catch(error){
         console.error(error);
-        next({ success: false, error: 'Ocurrió un error al crear el pedido completo' });
+        next({ success: false, error: 'Ocurrió un error al crear la compra completa' });
     }
 }
 
@@ -130,6 +137,13 @@ const putCompraCompleta = async (req, res = response, next) => {
             return next(res.status(404).json({ success: false, error: 'Compra no encontrada.' }));
         }
 
+        let estadoPago = '';
+        if (compraData.formaPago == 'Contado') {
+            estadoPago = 'Pago';
+        } else {
+            estadoPago = 'Pendiente';
+        }
+
         await existingCompra.update({
             proveedor: compraData.proveedor,
             fechaCompra: compraData.fechaCompra,
@@ -137,11 +151,12 @@ const putCompraCompleta = async (req, res = response, next) => {
             totalBruto: compraData.totalBruto,
             iva: compraData.iva,
             totalNeto: compraData.totalNeto,
-            formaPago: compraData.formaPago
+            formaPago: compraData.formaPago,
+            estadoPago:estadoPago
         });
 
         // Actualizar detalles de compra existentes o agregar nuevos detalles
-        for (const detalleCompraData of compraData.detalleEnCompras) {
+        for (const detalleCompraData of compraData.DetalleEnCompras) {
             const existingDetalle = await DetalleEnCompra.findOne({
                 where: {
                     compra: existingCompra.id,
@@ -180,10 +195,48 @@ const putCompraCompleta = async (req, res = response, next) => {
     }
 };
 
+const anularCompra = async (req, res = response) => {
+    try {
+        const { id } = req.params;
+        const { estadoCompra, motivoDeAnulacion } = req.body; // Modificado para recibir el motivo de anulación
+
+        const compra = await Compra.findByPk(id);
+
+        if (compra) {
+            if (compra.estadoCompra) {
+                compra.estadoCompra = false;
+                compra.motivoDeAnulacion = motivoDeAnulacion; 
+                await compra.save();
+                res.json({
+                    success: true,
+                    message: `La compra con número de factura ${compra.numeroFactura} fue anulada correctamente.`,
+                });
+            } else {
+                res.json({
+                    success: false,
+                    error: `La compra con número de factura ${compra.numeroFactura} ya está anulada.`,
+                });
+            }
+        } else {
+            res.status(404).json({
+                success: false,
+                error: `No existe una compra con el id ${id}`,
+            });
+        }
+    } catch (error) {
+        console.error('Error al anular la compra:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Ocurrió un problema al anular la compra',
+        });
+    }
+};
+
 
 module.exports = {
     getAllComprasConRelaciones,
     getCompraConRelacionesPorId,
     postCompraCompleta,
-    putCompraCompleta
+    putCompraCompleta,
+    anularCompra
 }

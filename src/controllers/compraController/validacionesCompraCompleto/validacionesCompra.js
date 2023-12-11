@@ -15,17 +15,6 @@ const validarCompra = async(body, res = response) => {
             }
         }
 
-        if (!body.fechaCompra) {
-            return res.status(400).json({ error: 'El campo fechaCompra es obligatorio.' });
-        }else {
-            const fechaCompraDate = new Date(body.fechaCompra);
-            const fechaActual = new Date();
-
-            if (fechaCompraDate > fechaActual) {
-                return res.status(400).json({ error: 'La fecha de compra no puede ser mayor que la fecha de registro.' });
-            }
-        }
-
         if (!body.numeroFactura) {
             return res.status(400).json({ error: 'El campo numeroFactura es obligatorio.' });
         } else {
@@ -36,26 +25,23 @@ const validarCompra = async(body, res = response) => {
                 }
             });
     
-            if (existingCompra) {
+            if (existingCompra && body.id == null) {
                 return res.status(400).json({ error: 'Este número de factura ya está asociado al proveedor especificado.' });
             }
         }
 
-        if (isNaN(body.totalBruto) || body.totalBruto < 1) {
-            return res.status(400).json({ error: 'El campo totalBruto debe ser un número mayor o igual a 1.' });
-        }
+        if (!body.fechaCompra) {
+            return res.status(400).json({ error: 'El campo fechaCompra es obligatorio.' });
+        }else {
+            const fechaCompraDate = new Date(body.fechaCompra);
+            const fechaActual = new Date();
 
-        if (isNaN(body.totalNeto) || body.totalNeto < 1) {
-            return res.status(400).json({ error: 'El campo totalNeto debe ser un número mayor o igual a 1.' });
+            if (fechaCompraDate > fechaActual) {
+                return res.status(400).json({ error: 'La fecha de compra no puede ser mayor que la fecha de registro.' });
+            }
         }
-
-        if (!body.formaPago) {
-            return res.status(400).json({ error: 'El campo formaPago es obligatorio.' });
-        } else if (!['Contado', 'Crédito'].includes(body.formaPago)) {
-            return res.status(400).json({ error: 'La forma de pago debe ser "Contado" o "Crédito".' });
-        }
-
-        if (!body.detalleEnCompras || body.detalleEnCompras.length === 0){
+            
+        if (!body.DetalleEnCompras || body.DetalleEnCompras.length === 0){
             return res.status(400).json({ error: 'Debe ingresar al menos un insumo en la compra.' });
         }
 
@@ -81,6 +67,21 @@ const validarCompra = async(body, res = response) => {
                 return res.status(400).json({ error: 'El campo valorTotal debe ser un número mayor o igual a 1.' });
             }
         }
+
+        if (!body.formaPago) {
+            return res.status(400).json({ error: 'El campo formaPago es obligatorio.' });
+        } else if (!['Contado', 'Crédito'].includes(body.formaPago)) {
+            return res.status(400).json({ error: 'La forma de pago debe ser "Contado" o "Crédito".' });
+        }
+
+        if (isNaN(body.totalBruto) || body.totalBruto < 1) {
+            return res.status(400).json({ error: 'El campo totalBruto debe ser un número mayor o igual a 1.' });
+        }
+
+        if (isNaN(body.totalNeto) || body.totalNeto < 1) {
+            return res.status(400).json({ error: 'El campo totalNeto debe ser un número mayor o igual a 1.' });
+        }
+
         return {success:true, error:null};
 
     }catch(error){

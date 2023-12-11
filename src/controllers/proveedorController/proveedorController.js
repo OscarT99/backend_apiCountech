@@ -40,7 +40,6 @@ const postProveedor = async (req, res = response) => {
     try{
         const { body } = req;
 
-        // Validaciones para cada atributo con mensajes de error personalizados
         if (!body.tipoProveedor) {
             return res.status(400).json({ error: 'El campo tipoProveedor es obligatorio.' });
         } else if (!['Persona', 'Empresa'].includes(body.tipoProveedor)) {
@@ -94,25 +93,10 @@ const postProveedor = async (req, res = response) => {
         } else if (!/^[A-Za-záéíóúüÜÁÉÍÓÑñ. ]+$/.test(body.ciudad)) {
             return res.status(400).json({ error: 'Ciudad no válida.' });
         }
-
-        if (!body.contacto) {
-            return res.status(400).json({ error: 'El campo contacto es obligatorio.' });
-        } else if (!/^[A-Za-záéíóúüÜÁÉÍÓÑñ. ]+$/.test(body.contacto)) {
-            return res.status(400).json({ error: 'Contacto no válido.' });
-        }
-
-        if (!body.telefono) {
-            return res.status(400).json({ error: 'El campo telefono es obligatorio.' });
-        } else if (!/^\d{10}$/.test(body.telefono)) {
-            return res.status(400).json({ error: 'Teléfono no válido.' });
-        }
-
-        if (!body.correo) {
-            return res.status(400).json({ error: 'El campo correo es obligatorio.' });
-        } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/.test(body.correo)) {
-            return res.status(400).json({ error: 'Correo no válido.' });
-        }
-
+                
+        // if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/.test(body.correo)) {
+        //     return res.status(400).json({ error: 'Correo no válido.' });
+        // }
                
         await Proveedor.create(body);
 
@@ -186,24 +170,9 @@ const putProveedor = async (req, res = response) => {
             return res.status(400).json({ error: 'Ciudad no válida.' });
         }
 
-        if (!body.contacto) {
-            return res.status(400).json({ error: 'El campo contacto es obligatorio.' });
-        } else if (!/^[A-Za-záéíóúüÜÁÉÍÓÑñ. ]+$/.test(body.contacto)) {
-            return res.status(400).json({ error: 'Contacto no válido.' });
-        }
-
-        if (!body.telefono) {
-            return res.status(400).json({ error: 'El campo telefono es obligatorio.' });
-        } else if (!/^\d{10}$/.test(body.telefono)) {
-            return res.status(400).json({ error: 'Teléfono no válido.' });
-        }
-
-        if (!body.correo) {
-            return res.status(400).json({ error: 'El campo correo es obligatorio.' });
-        } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/.test(body.correo)) {
-            return res.status(400).json({ error: 'Correo no válido.' });
-        }
-
+        // if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/.test(body.correo)) {
+        //     return res.status(400).json({ error: 'Correo no válido.' });
+        // }
         
         await proveedor.update(body);
 
@@ -220,36 +189,22 @@ const putProveedor = async (req, res = response) => {
     }
 }
 
-const deleteProveedor = async (req, res = response) => {
-    try{
-        const { id } = req.params;
-        const proveedor = await Proveedor.findByPk(id);
 
-        if(proveedor){
-            await proveedor.destroy();
-            res.json({
-                success: true,
-                message: 'El proveedor fue eliminado con éxito'
-            });
-        }else{
-            res.status(404).json({
-                success: false,
-                error: `No existe un proveedor con el id ${id}`
-            });
-        }
-    }catch(error){
-        console.log(error);
-        res.status(500).json({
-            success: false,
-            error: 'Ocurrió un error al eliminar el proveedor'
-        });
+const buscarProveedores = async (req, res = response) => {
+    try {
+        const terminoBusqueda = req.query.termino;
+        const proveedoresEncontrados = await Proveedor.buscarProveedores(terminoBusqueda);
+        res.json(proveedoresEncontrados);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error en el servidor' });
     }
-}
+};
 
 module.exports = {
     getProveedores,
     getProveedor,
     postProveedor,
     putProveedor,
-    deleteProveedor
+    buscarProveedores
 }

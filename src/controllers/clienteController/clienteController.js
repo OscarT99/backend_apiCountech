@@ -40,7 +40,6 @@ const postCliente = async (req, res = response) => {
     try {
         const { body } = req;
 
-        // Validaciones para cada atributo con mensajes de error personalizados
         if (!body.tipoCliente) {
             return res.status(400).json({ error: 'El campo tipoCliente es obligatorio.' });
         } else if (!['Empresa', 'Persona'].includes(body.tipoCliente)) {
@@ -94,23 +93,13 @@ const postCliente = async (req, res = response) => {
             return res.status(400).json({ error: 'Ciudad no válida.' });
         }
 
-        if (!body.contacto) {
-            return res.status(400).json({ error: 'El campo contacto es obligatorio.' });
-        } else if (!/^[A-Za-záéíóúüÜÁÉÍÓÑñ. ]+$/.test(body.contacto)) {
+        if (!/^[A-Za-záéíóúüÜÁÉÍÓÑñ. ]+$/.test(body.contacto)) {
             return res.status(400).json({ error: 'Contacto no válido.' });
         }
 
-        if (!body.telefono) {
-            return res.status(400).json({ error: 'El campo telefono es obligatorio.' });
-        } else if (!/^\d{10}$/.test(body.telefono)) {
-            return res.status(400).json({ error: 'Teléfono no válido.' });
-        }
-
-        if (!body.correo) {
-            return res.status(400).json({ error: 'El campo correo es obligatorio.' });
-        } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/.test(body.correo)) {
-            return res.status(400).json({ error: 'Correo no válido.' });
-        }
+        // if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/.test(body.correo)) {
+        //     return res.status(400).json({ error: 'Correo no válido.' });
+        // }
 
         await Cliente.create(body);
 
@@ -184,23 +173,13 @@ const putCliente = async (req, res = response) => {
             return res.status(400).json({ error: 'Ciudad no válida.' });
         }
 
-        if (!body.contacto) {
-            return res.status(400).json({ error: 'El campo contacto es obligatorio.' });
-        } else if (!/^[A-Za-záéíóúüÜÁÉÍÓÑñ. ]+$/.test(body.contacto)) {
+        if (!/^[A-Za-záéíóúüÜÁÉÍÓÑñ. ]+$/.test(body.contacto)) {
             return res.status(400).json({ error: 'Contacto no válido.' });
         }
 
-        if (!body.telefono) {
-            return res.status(400).json({ error: 'El campo telefono es obligatorio.' });
-        } else if (!/^\d{10}$/.test(body.telefono)) {
-            return res.status(400).json({ error: 'Teléfono no válido.' });
-        }
-
-        if (!body.correo) {
-            return res.status(400).json({ error: 'El campo correo es obligatorio.' });
-        } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/.test(body.correo)) {
-            return res.status(400).json({ error: 'Correo no válido.' });
-        }
+        // if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/.test(body.correo)) {
+        //     return res.status(400).json({ error: 'Correo no válido.' });
+        // }
         
         await cliente.update(body);
 
@@ -213,29 +192,6 @@ const putCliente = async (req, res = response) => {
         res.status(500).json({
             success: false,
             error: 'Ocurrió un error al actualizar el cliente'
-        });
-    }
-}
-
-const deleteCliente = async (req, res = response) => {
-    try {
-        const { id } = req.params;
-        const cliente = await Cliente.findByPk(id);
-
-        if (!cliente) {
-            return res.status(404).json({ success: false, error: `No existe un cliente con el id ${id}` });
-        } else {
-            await cliente.destroy();
-            res.json({
-                success: true,
-                message: 'El cliente fue eliminado con éxito'
-            });
-        }
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            success: false,
-            error: 'Ocurrió un error al eliminar el cliente'
         });
     }
 }
@@ -255,7 +211,6 @@ module.exports = {
     getClientes,
     getCliente,
     postCliente,
-    deleteCliente,
     putCliente,
     buscarClientes
 }
