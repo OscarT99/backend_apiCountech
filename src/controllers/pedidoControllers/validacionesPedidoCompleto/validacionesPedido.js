@@ -146,7 +146,7 @@ const validarPedido = async (body, res = response) => {
 
                 const nombresColoresUtilizados = new Set();
 
-                for (const colorData of procesoData.colorEnProceso || []) {
+                for (const colorData of procesoData.ColorEnProcesoEnReferenciaEnPedidos || []) {
 
                     const nombreColor = colorData.color;
 

@@ -63,7 +63,6 @@ const ClienteModel = sequelize.define('Cliente', {
   },
   direccion: {
     type: DataTypes.STRING,
-    allowNull: false,
   },
   contacto: {
     type: DataTypes.STRING,
@@ -73,17 +72,9 @@ const ClienteModel = sequelize.define('Cliente', {
   },
   telefono: {
     type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      is: /^\d{10}$/,
-    },
   },
   correo: {
-    type: DataTypes.STRING,
-    allowNull: false,    
-    validate: {
-      isEmail: true,
-    },
+    type: DataTypes.STRING,            
   },
   estado: {
     type: DataTypes.BOOLEAN,

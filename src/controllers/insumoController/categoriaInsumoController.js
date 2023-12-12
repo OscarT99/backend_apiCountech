@@ -132,10 +132,50 @@ const deleteCategoriaInsumo = async (req, res = response) => {
     }
 }
 
+const buscarCategoriasInsumo = async (req, res = response) => {
+    try {
+        const terminoBusqueda = req.query.termino;
+        const CategoriasEncontradas = await CategoriaInsumo.buscarCategoriasInsumo(terminoBusqueda);
+        res.json(CategoriasEncontradas);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error en el servidor' });
+    }
+};
+
+const actualizarEstadoCategoria = async (req, res = response) => {
+    try {
+        const { id } = req.params;
+        const categoria = await CategoriaInsumo.findByPk(id);
+
+        if (categoria) {
+            categoria.estado = !categoria.estado;
+            await categoria.save();
+            res.json({
+                success: true,
+                message: `Estado de la categoria actualizado correctamente. Nuevo estado: ${categoria.estado ? 'activo' : 'inactivo'}`,
+            });
+        } else {
+            res.status(404).json({
+                success: false,
+                error: `No existe una categoria con el id ${id}`,
+            });
+        }
+    } catch (error) {
+        console.error('Error al actualizar el estado de la categoria:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Ocurrió un problema al actualizar el estado de la categoria',
+        });
+    }
+};
+
 module.exports = {
     getCategoriasInsumo,
     getCategoriaInsumo,
     postCategoriaInsumo,
     putCategoriaInsumo,
     deleteCategoriaInsumo,
+    buscarCategoriasInsumo,
+    actualizarEstadoCategoria
 };

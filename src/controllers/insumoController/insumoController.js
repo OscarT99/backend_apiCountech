@@ -4,8 +4,8 @@ const categoriaInsumo = require('../../models/insumoModel/categoriaInsumoModel')
 
 const getInsumos = async (req, res = response) => {
     try {
-        const insumos = await Insumo.findAll();
-        res.json({ insumos });
+        const listInsumos = await Insumo.findAll();
+        res.json({ listInsumos });
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -94,7 +94,7 @@ const putInsumo = async (req, res = response) => {
                 return res.status(400).json({ success: false, error: 'Categoría no válida. Solo se permiten números.' });
             }
             
-            const categoria = await CategoriaInsumo.findByPk(body.categoria);
+            const categoria = await categoriaInsumo.findByPk(body.categoria);
             if (!categoria) {
                 return res.status(400).json({ success: false, error: 'La categoría de insumo especificada no existe.' });
             }
@@ -156,10 +156,112 @@ const deleteInsumo = async (req, res = response) => {
     }
 }
 
+const buscarInsumos = async (req, res = response) => {
+    try {
+        const terminoBusqueda = req.query.termino;
+        const InsumosEncontrados = await Insumo.buscarInsumos(terminoBusqueda);
+        res.json(InsumosEncontrados);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error en el servidor' });
+    }
+};
+
+const sumarCantidadInsumo = async (req, res = response) => {
+    try {
+      const { id } = req.params;
+      const { nuevaCantidad } = req.body;
+      const insumo = await Insumo.findByPk(id);
+  
+      if (insumo) {
+            insumo.cantidad += nuevaCantidad;
+            await insumo.save();
+  
+          res.json({
+            success: true,
+            message: 'Cantidad de insumo actualizada correctamente.',
+          });
+        
+      } else {
+        res.status(404).json({
+          success: false,
+          error: `No existe un insumo con el id ${id}`,
+        });
+      }
+    } catch (error) {
+      console.error('Error al actualizar la cantidad del insumo:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Ocurrió un problema al actualizar la cantidad del insumo',
+      });
+    }
+};
+
+const restarCantidadInsumo = async (req, res = response) => {
+    try {
+      const { id } = req.params;
+      const { nuevaCantidad } = req.body;
+      const insumo = await Insumo.findByPk(id);
+  
+      if (insumo) {
+            insumo.cantidad -= nuevaCantidad;
+            await insumo.save();
+  
+          res.json({
+            success: true,
+            message: 'Cantidad de insumo actualizada correctamente.',
+          });
+        
+      } else {
+        res.status(404).json({
+          success: false,
+          error: `No existe un insumo con el id ${id}`,
+        });
+      }
+    } catch (error) {
+      console.error('Error al actualizar la cantidad del insumo:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Ocurrió un problema al actualizar la cantidad del insumo',
+      });
+    }
+};
+
+const actualizarEstadoInsumo = async (req, res = response) => {
+    try {
+        const { id } = req.params;
+        const insumo = await Insumo.findByPk(id);
+
+        if (insumo) {
+            insumo.estado = !insumo.estado;
+            await insumo.save();
+            res.json({
+                success: true,
+                message: `Estado del insumo actualizado correctamente. Nuevo estado: ${insumo.estado ? 'activo' : 'inactivo'}`,
+            });
+        } else {
+            res.status(404).json({
+                success: false,
+                error: `No existe un insumo con el id ${id}`,
+            });
+        }
+    } catch (error) {
+        console.error('Error al actualizar el estado del insumo:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Ocurrió un problema al actualizar el estado del insumo',
+        });
+    }
+};
+  
 module.exports = {
     getInsumos,
     getInsumo,
     postInsumo,
     putInsumo,
     deleteInsumo,
+    buscarInsumos,
+    sumarCantidadInsumo,
+    restarCantidadInsumo,
+    actualizarEstadoInsumo
 };

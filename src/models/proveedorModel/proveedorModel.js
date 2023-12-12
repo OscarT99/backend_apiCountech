@@ -58,14 +58,12 @@ const ProveedorModel = sequelize.define('Proveedor', {
   },
   ciudad: {
     type: DataTypes.STRING,
-    allowNull: false,
     validate: {
       is: /^[A-Za-záéíóúüÜÁÉÍÓÑñ. ]+/,
     },
   },
   direccion: {
     type: DataTypes.STRING,
-    allowNull: false,
   },
   contacto: {
     type: DataTypes.STRING,
@@ -75,18 +73,9 @@ const ProveedorModel = sequelize.define('Proveedor', {
   },
   telefono: {
     type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      is: /^\d{10}$/,
-    },
   },
   correo: {
     type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true,
-    },
   },
   estado: {
     type: DataTypes.BOOLEAN,

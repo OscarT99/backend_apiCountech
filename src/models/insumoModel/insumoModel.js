@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../../database/config');
-const { categoriaInsumo} = require('./categoriaInsumoModel');
 const CategoriaInsumo = require('./categoriaInsumoModel');
 
 const InsumoModel = sequelize.define('Insumo',{
