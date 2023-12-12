@@ -191,6 +191,34 @@ const postPedidoCompleto = async (req, res = response,next) => {
     }
 };
 
+const putPedidoEstado = async (req, res = response, next) => {
+    const { id } = req.params;
+    const { body } = req;
+
+    try{
+        const pedido = await Pedido.findByPk(id);
+
+        if (!pedido) {
+            return res.status(404).json({ success: false, error: 'Pedido no encontrado.' });
+        }
+
+        await pedido.update(body);
+
+        res.json({
+            success: true,
+            message: 'Pedido actualizado exitosamente.',
+        });
+    }catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            error: 'Ocurrió un problema al actualizar el estado del pedido',
+        });
+    }
+}
+
+
+
 const putPedidoCompleto = async (req, res = response, next) => {
     const { id } = req.params;
     const pedidoData = req.body;
@@ -472,5 +500,6 @@ module.exports = {
     getPedidoConRelacionesPorId,
     postPedidoCompleto,
     putPedidoCompleto,
-    deletePedidoCompleto
+    deletePedidoCompleto,
+    putPedidoEstado
 }
