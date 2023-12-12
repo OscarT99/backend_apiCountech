@@ -24,14 +24,7 @@ const getAllPedidosConRelaciones = async (req, res = response) => {
                         {
                             model: ProcesoReferenciaPedido,
                             include: [
-                                {
-                                    model: AsignarProceso,
-                                    // include: [
-                                    //     {
-                                    //         model: Empleado,
-                                    //     }
-                                    // ]
-                                },
+                                
                                 {
 
                                     model: ColorProcesoReferenciaPedido,
@@ -148,7 +141,8 @@ const postPedidoCompleto = async (req, res = response,next) => {
                         referencia: referenciaEnPedido.id,
                         proceso: procesoData.proceso,
                         tipoDeMaquina: procesoData.tipoDeMaquina,
-                        cantidadTotal: procesoData.cantidadTotal
+                        cantidadTotal: procesoData.cantidadTotal,
+                        cantidadPendiente:procesoData.cantidadTotal
                         // ... otras propiedades de ProcesoReferenciaPedido
                     });
 

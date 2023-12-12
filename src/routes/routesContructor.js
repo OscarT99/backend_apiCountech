@@ -13,6 +13,8 @@ const pedidoCompletoRoute = require('./pedidoRoutes/pedidoCompletoRoute')
 const compraCompletoRoute = require('./compraRoute/compraCompletoRoute')
 const authRoute = require('./authRoute/authRoute');
 const salidaInsumoRoute = require('./salidaInsumoRoute/salidaInsumoRoute')
+const procesoEnReferencia = require('./pedidoRoutes/procesoReferenciaPedidoController')
+
 
 function configureRoutes(app, path) {
     app.use(path, clienteRoutes);
@@ -29,7 +31,8 @@ function configureRoutes(app, path) {
     app.use(path, pedidoCompletoRoute);
     app.use(path, compraCompletoRoute);
     app.use(path, authRoute);
-    app.use(path, salidaInsumoRoute); 
+    app.use(path, salidaInsumoRoute);
+    app.use(path, procesoEnReferencia); 
     }
 
 module.exports = configureRoutes;

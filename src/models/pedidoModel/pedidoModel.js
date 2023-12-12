@@ -4,13 +4,13 @@ const Cliente = require('../clienteModel/clienteModel');
 const ReferenciaPedido = require('./referenciaPedidoModel')
 
 const PedidoModel = sequelize.define('Pedido', {
-  // cliente: {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false,
-  //   validate: {
-  //     notNull: true,
-  //   },
-  // },  
+  cliente: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    validate: {
+      notNull: true,
+    },
+  },  
   ordenTrabajo: {
     type: DataTypes.STRING,
     allowNull: false,    
@@ -58,7 +58,7 @@ const PedidoModel = sequelize.define('Pedido', {
   },
   estado: {
     type: DataTypes.STRING,
-    defaultValue: 'Registrado',
+    defaultValue: 'Terminado',
     validate: {
       isIn: [['Registrado', 'En proceso', 'Terminado']],
     },
